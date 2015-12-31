@@ -1,0 +1,47 @@
+<openerp>
+    <data>
+        
+    	<record id="mahasiswa_form" model="ir.ui.view">
+    		<field name="name">mahasiswa.form</field>
+    		<field name="model">mahasiswa.mahasiswa</field>
+    		<field name="arch" type="xml"></field>
+    			<form string="tree_string">
+    				<sheet>
+    					<group>
+    						<field name="nama" string="Nama"></field>
+    						<field name="kelas" string="Kelas"></field>
+    						<field name="alamat" string="Alamat"></field>
+    					</group>
+    				</sheet>
+    			</form>
+    	</record>
+
+    	<record id="mahasiswa_tree" model="ir.ui.view">
+    		<field name="name">mahasiswa.form</field>
+    		<field name="model">mahasiswa.mahasiswa</field>
+    		<field name="arch" type="xml"></field>
+    			<form string="tree_string">
+    				<sheet>
+    					<group>
+    						<field name="nama" string="Nama"></field>
+    						<field name="kelas" string="Kelas"></field>
+    						<field name="alamat" string="Alamat"></field>
+    					</group>
+    				</sheet>
+    			</form>
+    	</record>
+
+    	<record id="mahasiswa_action" model="ir.actions.act_window">
+    		<field name="name">Mahasiswa</field>
+    		<field name="res_model">mahasiswa.mahasiswa</field>
+    		<field name="view_type">form</field>
+    		<field name="view_mode">tree,form</field>
+    	</record>
+
+    	<menuitem id="master_root" name="Data Master" />
+    	<menuitem id="data_holder" name="Data Master" parent="master_root"/>
+    	<menuitem id="mahasiswa_menu" name="Data Mahasiswa" action="mahasiswa_action" parent="data_holder" />
+
+
+    </data>
+</openerp>
