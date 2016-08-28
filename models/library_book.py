@@ -13,15 +13,15 @@ class LibraryBook(models.Model):
     author_ids = fields.Many2many('res.partner', string='Authors')
 
 
-    # def name_get(self):
-    #     """
-    #     untuk mendefinisikan name_get
-    #     title pada atas halaman ketika saat form view
-    #     """
-    #     result = []
-    #     for record in self:
-    #         result.append(
-    #             (record.id,
-    #             u"%s (%s)" % (record.name, record.date_release)
-    #         ))
-    #     return result
+    def name_get(self):
+        """
+        untuk mendefinisikan name_get
+        title pada atas halaman ketika saat form view
+        """
+        result = []
+        for record in self:
+            result.append(
+                (record.id,
+                u"%s (%s)" % (record.name, record.date_release)
+            ))
+        return result
