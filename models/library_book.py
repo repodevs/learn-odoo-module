@@ -2,6 +2,13 @@
 from openerp import models, fields
 from openerp.addons import decimal_precision as dp
 
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+    book_ids = fields.One2many(
+        'library.book', 'publisher_id',
+        string='Published Books'
+    )
+
 class LibraryBook(models.Model):
     _name = 'library.book'
     _description = 'Library Book' # membuat deskripsi di database
@@ -11,7 +18,6 @@ class LibraryBook(models.Model):
     name = fields.Char('Title', required=True)
     short_name = fields.Char('Short Title')
     date_release = fields.Date('Release Date')
-    author_ids = fields.Many2many('res.partner', string='Authors')
     notes = fields.Text('Internal Notes')
     state = fields.Selection(
         [('draft', 'Not Available'),
@@ -51,6 +57,14 @@ class LibraryBook(models.Model):
         'Retail Price',
         # (Optional) currency_field='currency_id',
         )
+    publisher_id = fields.Many2one(
+        'res.partner', string='Publisher',
+        # Optional:
+        ondelete='set null',
+        context={},
+        domain=[],
+    )
+    author_ids = fields.Many2many('res.partner', string='Authors')
 
 
 
