@@ -7,7 +7,13 @@ class ResPartner(models.Model):
     book_ids = fields.One2many(
         'library.book', 'publisher_id',
         string='Published Books'
-    )
+        )
+    book_ids = fields.Many2many(
+        'library.book',
+        string='Authored Books',
+        # relation='library_book_res_partner_rel'  # optional
+        )
+
 
 class LibraryBook(models.Model):
     _name = 'library.book'
@@ -24,7 +30,7 @@ class LibraryBook(models.Model):
          ('available', 'Available'),
          ('lost', 'Lost')],
          'State'
-    )
+         )
     cover = fields.Binary('Book Cover')
     out_of_print = fields.Boolean('Out of Print?')
     date_release = fields.Date('Release Date')
@@ -50,7 +56,7 @@ class LibraryBook(models.Model):
     reader_rating = fields.Float(
         'Reader Average Rating',
         (14, 4), # Optional precision (total, decimals)
-    )
+        )
     cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
     currency_id = fields.Many2one('res.currency', string='Currency')
     retail_price = fields.Monetary(
@@ -63,7 +69,7 @@ class LibraryBook(models.Model):
         ondelete='set null',
         context={},
         domain=[],
-    )
+        )
     author_ids = fields.Many2many('res.partner', string='Authors')
 
 
