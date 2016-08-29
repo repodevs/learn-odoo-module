@@ -46,6 +46,13 @@ class LibraryBook(models.Model):
         (14, 4), # Optional precision (total, decimals)
     )
     cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
+    currency_id = fields.Many2one('res.currency', string='Currency')
+    retail_price = fields.Monetary(
+        'Retail Price',
+        # (Optional) currency_field='currency_id',
+        )
+
+
 
     # def name_get(self):
     #     """
