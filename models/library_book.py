@@ -72,6 +72,9 @@ class LibraryBook(models.Model):
         context={},
         domain=[],
         )
+    publisher_city = fields.Char(
+        'Publisher City', related='publisher_id.city'
+        )
     author_ids = fields.Many2many('res.partner', string='Authors')
     age_days = fields.Float(
         string='Days Since Release',
@@ -80,7 +83,7 @@ class LibraryBook(models.Model):
         search='_search_age',
         store=False,
         compute_sudo=False,
-    )
+        )
 
 
     _sql_constraints = [
