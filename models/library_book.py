@@ -34,8 +34,21 @@ class ResPartner(models.Model):
 
 
 
+# Add the abstract model for the archive feature.
+# It must be defined in the Library Book model, where it will be used
+class BaseArchive(models.AbstractModel):
+    _name = 'base.archive'
+    active = fields.Boolean(default=True)
+
+    def do_action(self):
+        for record in self:
+            record.active = not record.active
+
+
+
 class LibraryBook(models.Model):
     _name = 'library.book'
+    _inherit = 'base.archive' # edit the Library Book model to inherit the Archive model
     _description = 'Library Book' # membuat deskripsi di database
     _order = 'date_release desc, name' #membuat urutan berdasarkan date_release kemudian name
     _rec_name = 'short_name'
