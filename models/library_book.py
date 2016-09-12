@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields, api
 from openerp.addons import decimal_precision as dp
+from openerp.fields import Date as fDate
+from datetime import timedelta as td
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -70,6 +73,15 @@ class LibraryBook(models.Model):
         domain=[],
         )
     author_ids = fields.Many2many('res.partner', string='Authors')
+    age_days = fields.Float(
+        string='Days Since Release',
+        compute='_compute_age',
+        inverse='_inverse_age',
+        search='_search_age',
+        store=False,
+        compute_sudo=False,
+    )
+
 
     _sql_constraints = [
         ('name_uniq',
@@ -83,6 +95,28 @@ class LibraryBook(models.Model):
         for r in self:
             if r.date_release > fields.Date.today():
                 raise models.ValidationError('Release date must be in the past.')
+
+    #add the method with the value computation logic
+    @api.depends('date_release')
+    def _compute_age(self):
+        today = fDate.from_string(fDate.today())
+        for book in self.filtered('date_release'):
+            delta = (fDate.from_string(book.date_release - today))
+            book.age_days = delta.days
+
+    #add the method implementing the logic to write on the computed field
+    def _inverse_age(self):
+        today = fDate.from_string(fDate.today())
+        for book in self.filtered('date_release'):
+            d = td(days=book.age_days) - today
+            book.date_release = fDate.to_string(d)
+
+    #To implement the logic allowing you to search on the computed field
+    def _search_age(self, operator, value):
+        today = fDate.from_string(fDate.today())
+        value_days = td(days=value)
+        value_date = fDate.to_string(today - value_days)
+        return [('date_release', operator, value_date)]
 
 
 
