@@ -60,6 +60,7 @@ class LibraryBook(models.Model):
     state = fields.Selection(
         [('draft', 'Not Available'),
          ('available', 'Available'),
+         ('borrowed', 'Borrowec'),
          ('lost', 'Lost')],
          'State'
          )
@@ -164,6 +165,26 @@ class LibraryBook(models.Model):
         selection='_referencable_models',
         string='Reference Document'
         )
+
+    # Add a helper method to check whether a state transition is allowed:
+    @api.model
+    def is_allowed_transition(self, old_state, new_state):
+        allowed = [('draft', 'available'),
+                   ('available', 'borrowed'),
+                   ('borrowed', 'available'),
+                   ('available', 'lost'),
+                   ('borrowed', 'lost'),
+                   ('lost', 'available')]
+        return (old_state, new_state) in allowed
+
+    # Add a method to change the state of some books to a new one passed as an argument:
+    @api.multi
+    def change_state(self, new_state):
+        for book in self:
+            if book.is_allowed_transition(book.state, new_state):
+                book.state = new_state
+            else:
+                continue
 
 
 
