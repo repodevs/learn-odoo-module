@@ -187,6 +187,12 @@ class LibraryBook(models.Model):
                 continue
 
 
+    @api.model
+    def get_all_library_members(self):
+        library_member_model = self.env['library.member']
+        return library_member_model.search([])
+
+
 
 # 1. Add the new model, inheriting from res.partner :
 class LibraryMember(models.Model):
