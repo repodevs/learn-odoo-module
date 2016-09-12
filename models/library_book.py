@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields
+from openerp import models, fields, api
 from openerp.addons import decimal_precision as dp
 
 class ResPartner(models.Model):
@@ -33,7 +33,6 @@ class LibraryBook(models.Model):
          )
     cover = fields.Binary('Book Cover')
     out_of_print = fields.Boolean('Out of Print?')
-    date_release = fields.Date('Release Date')
     date_updated = fields.Datetime('Last Updated')
     description = fields.Html(
             string='Description',
@@ -71,6 +70,20 @@ class LibraryBook(models.Model):
         domain=[],
         )
     author_ids = fields.Many2many('res.partner', string='Authors')
+
+    _sql_constraints = [
+        ('name_uniq',
+         'UNIQUE (name)',
+         'Book title must be uniqe..')
+    ] #  database constrains
+
+    # python file constrains
+    @api.constrains('date_release')
+    def _check_release_date(self):
+        for r in self:
+            if r.date_release > fields.Date.today():
+                raise models.ValidationError('Release date must be in the past.')
+
 
 
 
