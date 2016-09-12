@@ -48,7 +48,7 @@ class BaseArchive(models.AbstractModel):
 
 class LibraryBook(models.Model):
     _name = 'library.book'
-    _inherit = 'base.archive' # edit the Library Book model to inherit the Archive model
+    _inherit = 'base.archive' #
     _description = 'Library Book' # membuat deskripsi di database
     _order = 'date_release desc, name' #membuat urutan berdasarkan date_release kemudian name
     _rec_name = 'short_name'
@@ -113,7 +113,9 @@ class LibraryBook(models.Model):
         store=False,
         compute_sudo=False,
         )
-
+    date_start = fields.Date('Member Since')
+    date_end = fields.Date('Termination Date')
+    member_number = fields.Char()
 
     _sql_constraints = [
         ('name_uniq',
@@ -162,6 +164,19 @@ class LibraryBook(models.Model):
         selection='_referencable_models',
         string='Reference Document'
         )
+
+
+
+# 1. Add the new model, inheriting from res.partner :
+class LibraryMember(models.Model):
+    _name = 'library.member'
+    _inherits = {'res.partner': 'partner_id'}
+    partner_id = fields.Many2one(
+        'res.partner',
+        ondelete='cascade'
+        )
+
+
 
 
 
