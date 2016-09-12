@@ -32,6 +32,9 @@
               <group>
                 <field name="date_release"/>
               </group>
+              <group>
+                  <!--<field name="ref_doc_id" can_create="False"/>-->
+              </group>
           </form>
 
         </field>

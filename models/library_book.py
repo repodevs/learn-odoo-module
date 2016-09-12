@@ -122,6 +122,19 @@ class LibraryBook(models.Model):
         return [('date_release', operator, value_date)]
 
 
+    #add a helper method to dynamically build the list of selectable target models
+    @api.model
+    def _referencable_models(self):
+        models = self.env['res.request.link'].search([])
+        return [(x.object, x.name) for x in models]
+
+    #add the Reference field and use the previous function to provide the list of selectable models
+    ref_doc_id = fields.Reference(
+        selection='_referencable_models',
+        string='Reference Document'
+        )
+
+
 
 
     # def name_get(self):
