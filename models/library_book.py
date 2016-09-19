@@ -287,6 +287,26 @@ class SomeModel(models.Model):
                                                 # It defaults to False . or can use `search_count(domain)`
                             )
 
+    ## Filtering recordsets
+    # using manual function
+    @api.model
+    def partners_with_email(self, partners):
+        def predicate(partner):
+            if partner.email:
+                return True
+            return False
+        return partners.filter(predicate)
+
+    # using lambda function
+    @api.model
+    def partners_with_email_variant(self, partners):
+        return partners.filter(lambda p: p.email)
+
+    # simple filtering
+    @api.model
+    def partners_with_email_variant2(self, partners):
+        return partners.filter('email')
+
 
 
 
