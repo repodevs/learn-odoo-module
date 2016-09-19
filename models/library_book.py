@@ -205,10 +205,39 @@ class LibraryMember(models.Model):
 
 
 
+class SomeModel(models.Model):
+    _name = 'some.model'
+    # name = fields.Char('Name', required=True)
+    # email = fields.Char('Email')
+    # date = fields.Date('Date')
+    # is_company = fields.Boolean('Is a company')
+    # parent_id = fields.Many2one('res.partner', 'Related Company')
+    # child_ids = fields.One2many('res.partner', 'parent_id', 'Contacts')
+
+    @api.multi
+    def create_partner(self):
+        today_str = fields.Date.context_today()
+        val1 = {'name': u'Eric Idle',
+                'email': u'eric.idle@example.com',
+                'date': today_str}
+        val2 = {'name': u'Jhon Cleese',
+                'email': u'jhon.cleese@example.com',
+                'date': today_str}
+        partner_val = {
+            'name': u'Flying Circus',
+            'email': u'm.python@example.com',
+            'date': today_str,
+            'is_company': True,
+            'child_ids': [(0, 0, val1),
+                          (0, 0, val2),
+                          ]
+            }
+        record = self.env['res.partner'].create(partner_val)
+
+        return record
 
 
-
-    # def name_get(self):
+        # def name_get(self):
     #     """
     #     untuk mendefinisikan name_get
     #     title pada atas halaman ketika saat form view
