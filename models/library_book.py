@@ -260,6 +260,35 @@ class SomeModel(models.Model):
             )
 
 
+    # Searching for records
+    # 1. Get an empty recordset for res.partner
+    @api.model
+    def find_partners_and_contacts(self, name):
+        partner = self.env['res.partner']
+
+        # search domain for your criteria
+        domain = ['|',
+                  '&',
+                  ('is_company', '=', True),
+                  ('name', 'like', name),
+                  '&',
+                  ('is_company', '=', False),
+                  ('parent_id.name', 'like', name)
+                  ]
+
+        # 3. Call the search() method with the domain and return the recordset
+        return partner.search(
+                                domain,
+                                ##option
+                                #offset=0, #This is used to skip the N first records that match the query
+                                #limit=0, #return at most N records. By default, there is no limit
+                                #order=sort_specification, # his is used to force the order on the returned recordset
+                                #count=boolean, # if True this returns the number of records instead of the recordset.
+                                                # It defaults to False . or can use `search_count(domain)`
+                            )
+
+
+
 
 
 
