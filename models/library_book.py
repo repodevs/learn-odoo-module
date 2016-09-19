@@ -237,6 +237,32 @@ class SomeModel(models.Model):
         return record
 
 
+    # To update a partner, you can write a new method
+    # method 1 using Combining recordsets
+    @api.model
+    def update_contacts(self, partner, contacts):
+        partner.ensure_one() # memastikan argument contains one record except will raise error
+        if contacts:
+            partner.date = fields.Date.context_today()
+            partner.child_ids |= contacts
+
+
+    # method 2 using update()
+    # update() can use just only 1 recordsets
+    @api.model
+    def update_contacts_option2(self, partner, contacts):
+        partner.ensure_one()
+        if contacts:
+            today = fields.Date.context_today()
+            partner.update(
+                {'date': today,
+                 'child_ids': partner_child_ids | contacts}
+            )
+
+
+
+
+
         # def name_get(self):
     #     """
     #     untuk mendefinisikan name_get
