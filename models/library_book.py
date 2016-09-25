@@ -308,6 +308,16 @@ class SomeModel(models.Model):
         return partners.filter('email')
 
 
+    ## Traversing recordset relations
+    @api.model
+    def get_email_addresses(self, partner):
+        partner.ensure_one()
+        # Call mapped() to get the e-mail addresses of the contacts of the partner
+        return partner.mapped('child_ids.email')
+
+    def get_companies(self, partners):
+        # Call mapped() to get the different companies of the partners
+        return partners.mapped('parent_id')
 
 
 
