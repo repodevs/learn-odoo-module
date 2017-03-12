@@ -193,6 +193,20 @@ class LibraryBook(models.Model):
         return library_member_model.search([])
 
 
+    # Customizing how records are searched
+    @api.model
+    def _name_search(self, name='', args=None, operator='ilike', limit=100, name_get_uid=None):
+        args = [] if args is None else args.copy()
+        if not (name == '' and operator == 'ilike'):
+            args += ['|', '|',
+                        ('name', operator, name),
+                        ('isbn', operator, name),
+                        ('author_ids.name', operator, name)
+                    ]
+        return super(LibraryBook, self)._name_search(
+            name='', args=args, operator='ilike',
+            limit=limit, name_get_uid=name_get_uid)
+
 
 # 1. Add the new model, inheriting from res.partner :
 class LibraryMember(models.Model):
