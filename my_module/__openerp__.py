@@ -9,7 +9,7 @@
     'category': 'Uncategorized',
     'version': '9.0.1.0.0',
     'depends': ['base'],
-#    'data': ['views.xml'],
+    'data': ['views/library_book.xml'],
 #    'demo': ['demo.xml'],
 }
 
